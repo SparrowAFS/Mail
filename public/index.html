@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AuraForm Auto Mailer</title>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #020617, #0b0f1a);
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #a78bfa;
+    }
+
+    .box {
+      background: #111827;
+      padding: 30px;
+      border-radius: 20px;
+      width: 420px;
+      margin: auto;
+      box-shadow: 0 0 30px rgba(124,58,237,0.5);
+    }
+
+    /* DRAG BOX */
+    .file-upload {
+      border: 2px dashed #7c3aed;
+      border-radius: 12px;
+      min-height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 15px;
+    }
+
+    .file-upload.dragover {
+      background: rgba(124,58,237,0.2);
+      border-color: #a78bfa;
+      transform: scale(1.02);
+    }
+
+    .file-upload input {
+      display: none;
+    }
+
+    .file-text {
+      display: flex;
+      gap: 8px;
+      color: #c4b5fd;
+      align-items: center;
+    }
+
+    textarea {
+      width: 100%;
+      margin: 15px 0;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #020617;
+      color: white;
+    }
+
+    button {
+      background: linear-gradient(135deg, #7c3aed, #2563eb);
+      padding: 14px;
+      border-radius: 30px;
+      border: none;
+      color: white;
+      width: 100%;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #fileName {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🚀 AuraForm Auto Mailer</h1>
+
+  <div class="box">
+
+    <form id="form" action="/send" method="POST" enctype="multipart/form-data">
+
+      <!-- DRAG DROP AREA -->
+      <div class="file-upload" id="dropArea">
+        <input type="file" name="html" id="fileInput" accept=".html" required>
+
+        <div class="file-text">
+          📂 <span>Click or Drag HTML File Here</span>
+        </div>
+      </div>
+
+      <div id="fileName"></div>
+
+      <textarea name="emails" rows="5" placeholder="Enter emails (comma separated)" required></textarea>
+
+      <button type="submit">🚀 Send Mail</button>
+
+    </form>
+
+  </div>
+
+  <script>
+    const dropArea = document.getElementById("dropArea");
+    const fileInput = document.getElementById("fileInput");
+    const fileName = document.getElementById("fileName");
+
+    // Click to open file
+    dropArea.addEventListener("click", () => fileInput.click());
+
+    // Show file name
+    fileInput.addEventListener("change", () => {
+      fileName.innerText = "Selected: " + fileInput.files[0].name;
+    });
+
+    // Drag events
+    dropArea.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropArea.classList.add("dragover");
+    });
+
+    dropArea.addEventListener("dragleave", () => {
+      dropArea.classList.remove("dragover");
+    });
+
+    dropArea.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropArea.classList.remove("dragover");
+
+      const file = e.dataTransfer.files[0];
+      if (file && file.name.endsWith(".html")) {
+        fileInput.files = e.dataTransfer.files;
+        fileName.innerText = "Selected: " + file.name;
+      } else {
+        alert("Please upload a valid HTML file");
+      }
+    });
+  </script>
+
+</body>
+</html>
